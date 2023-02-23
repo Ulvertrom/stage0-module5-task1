@@ -11,7 +11,8 @@ public class ArrayTasks {
      * Return a String[] array that will list all the seasons of the year, starting with winter.
      */
     public String[] seasonsArray() {
-
+        String[] seasons = {"winter", "spring", "summer", "autumn"};
+        return seasons;
     }
 
     /**
@@ -25,7 +26,9 @@ public class ArrayTasks {
      * length = 5  -> [1, 2, 3, 4, 5]
      */
     public int[] generateNumbers(int length) {
-
+        int[] myArr = new int[length];
+        for (int i = 0; i < length; i++) myArr[i] = i + 1;
+        return myArr;
     }
 
     /**
@@ -37,7 +40,10 @@ public class ArrayTasks {
      * arr = [5, -3, -4] -> sum = -2
      */
     public int totalSum(int[] arr) {
-
+        int l = arr.length;
+        int sum = 0;
+        for (int i = 0; i < l; i++) sum += arr[i];
+        return sum;
     }
 
     /**
@@ -50,7 +56,14 @@ public class ArrayTasks {
      * arr = [5, -3, -4],   number = 10    ->  -1
      */
     public int findIndexOfNumber(int[] arr, int number) {
-
+        int index = -1;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == number) {
+                index = i+1;
+                break;
+            }
+        }
+        return index;
     }
 
     /**
@@ -63,7 +76,9 @@ public class ArrayTasks {
      * arr = ["pineapple", "apple", "pen"] -> ["pen", "apple", "pineapple"]
      */
     public String[] reverseArray(String[] arr) {
-
+        String[] result = new String[arr.length];
+        for (int i = 0; i < arr.length; i++) result[i] = arr[arr.length - i - 1];
+        return result;
     }
 
     /**
@@ -78,7 +93,19 @@ public class ArrayTasks {
      * arr = [1, 2]         -> [1, 2]
      */
     public int[] getOnlyPositiveNumbers(int[] arr) {
-
+        int lengthNewArr = 0;
+        for (int i = 0; i < arr.length; i++)
+            if (arr[i] > 0) lengthNewArr++;
+        int[] newArr = new int[lengthNewArr];
+        int k = 0, j = 0;
+        while (j < lengthNewArr) {
+            if (arr[k] > 0) {
+                newArr[j] = arr[k];
+                j++;
+            }
+            k++;
+        }
+        return newArr;
     }
 
     /**
@@ -91,7 +118,74 @@ public class ArrayTasks {
      * arr = [[3, 1, 2,], [3,2]] -> [[2, 3], [1, 2, 3]]
      * arr = [[5, 4], [7]]       -> [[7], [4, 5]]
      */
-    public int[][] sortRaggedArray(int[][] arr) {
+    public void quickSort(int[] sortArr, int low, int high) {
+        //завершить,если массив пуст или уже нечего делить
+        if (sortArr.length == 0 || low >= high) return;
 
+        //выбираем опорный элемент
+        int middle = low + (high - low) / 2;
+        int border = sortArr[middle];
+
+        //разделияем на подмассивы и меняем местами
+        int i = low, j = high;
+        while (i <= j) {
+            while (sortArr[i] < border) i++;
+            while (sortArr[j] > border) j--;
+            if (i <= j) {
+                int swap = sortArr[i];
+                sortArr[i] = sortArr[j];
+                sortArr[j] = swap;
+                i++;
+                j--;
+            }
+        }
+
+        //рекурсия для сортировки левой и правой части
+        if (low < j) quickSort(sortArr, low, j);
+        if (high > i) quickSort(sortArr, i, high);
     }
+
+    public void quickSort(int[][] sortArr, int low, int high) {
+        //завершить,если массив пуст или уже нечего делить
+        if (sortArr.length == 0 || low >= high) return;
+
+        //выбираем опорный элемент
+        int middle = low + (high - low) / 2;
+        int[] border = sortArr[middle];
+
+        //разделияем на подмассивы и меняем местами
+        int i = low, j = high;
+        while (i <= j) {
+            while (sortArr[i].length < border.length) i++;
+            while (sortArr[j].length > border.length) j--;
+            if (i <= j) {
+                int[] swap = sortArr[i];
+                sortArr[i] = sortArr[j];
+                sortArr[j] = swap;
+                i++;
+                j--;
+            }
+        }
+
+        //рекурсия для сортировки левой и правой части
+        if (low < j) quickSort(sortArr, low, j);
+        if (high > i) quickSort(sortArr, i, high);
+    }
+
+    public int[] mySorting(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+        return arr;
+    }
+
+    public int[][] mySorting(int[][] arr) {
+        quickSort(arr, 0, arr.length - 1);
+        return arr;
+    }
+
+    public int[][] sortRaggedArray(int[][] arr) {
+        for (int i = 0; i < arr.length; i++) arr = mySorting(arr);
+        for (int i = 0; i < arr.length; i++) arr[i] = mySorting(arr[i]);
+        return arr;
+    }
+
 }
